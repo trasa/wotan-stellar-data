@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WotanStellar.Data", "WotanStellar.Data\WotanStellar.Data.csproj", "{164ABDDA-733C-4FDE-AA78-58A082BBCE54}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WotanStellar.Command", "WotanStellar.Command\WotanStellar.Command.csproj", "{1FE2E4DA-EABC-4960-9450-29949C28255A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{164ABDDA-733C-4FDE-AA78-58A082BBCE54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{164ABDDA-733C-4FDE-AA78-58A082BBCE54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{164ABDDA-733C-4FDE-AA78-58A082BBCE54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{164ABDDA-733C-4FDE-AA78-58A082BBCE54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FE2E4DA-EABC-4960-9450-29949C28255A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FE2E4DA-EABC-4960-9450-29949C28255A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FE2E4DA-EABC-4960-9450-29949C28255A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FE2E4DA-EABC-4960-9450-29949C28255A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
