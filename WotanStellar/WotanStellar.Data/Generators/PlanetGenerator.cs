@@ -6,7 +6,7 @@ namespace WotanStellar.Data.Generators;
 
 public interface IPlanetGenerator
 {
-    List<Planet> GeneratePlanets(StarSystem system);
+    void GeneratePlanets(StarSystem system);
 }
 
 public class PlanetGenerator : IPlanetGenerator
@@ -20,35 +20,29 @@ public class PlanetGenerator : IPlanetGenerator
         _moonGenerator = moonGenerator;
     }
 
-    public List<Planet> GeneratePlanets(StarSystem system)
+    public void GeneratePlanets(StarSystem system)
     {
         // Use star system ID as base seed for deterministic generation
         var random = new Random(system.Id);
-        var planets = new List<Planet>();
+
+        _logger.LogWarning("Generating planets for system {SystemId}, has {Count} stars", system.Id, system.Stars.Count);
         foreach (var star in system.Stars)
         {
-            var result = GeneratePlanets(star, random);
-            planets.AddRange(result);
+            GeneratePlanets(star, random);
         }
-
-        return planets;
     }
 
-    private List<Planet> GeneratePlanets(Star star, Random random)
+    private void GeneratePlanets(Star star, Random random)
     {
-        _logger.LogInformation("Generating planets for star {StarName} (ID: {StarId})", star.StarName, star.Id);
-        var planets = new List<Planet>();
-        int planetCount = DeterminePlanetCount(star, random);
+        _logger.LogWarning("Generating planets for star {StarName} (ID: {StarId})", star.StarName, star.Id);
+        var planetCount = DeterminePlanetCount(star, random);
         _logger.LogInformation("Generating {PlanetCount} planets for star {StarName}", planetCount, star.StarName);
-        for (int i = 0; i < planetCount; i++)
+        for (var i = 0; i < planetCount; i++)
         {
             var planet = GeneratePlanet(star, i, random);
-            planets.Add(planet);
-            // generate moons
+            star.Planets.Add(planet);
             _moonGenerator.GenerateMoons(planet, random);
         }
-
-        return planets;
     }
 
     private int DeterminePlanetCount(Star star, Random random)

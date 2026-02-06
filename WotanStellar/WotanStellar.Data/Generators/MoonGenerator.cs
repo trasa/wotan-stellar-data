@@ -19,9 +19,9 @@ public class MoonGenerator : IMoonGenerator
     public void GenerateMoons(Planet planet, Random random)
     {
         _logger.LogInformation("Generating moons for planet {PlanetName} (ID: {PlanetId})", planet.PlanetName, planet.Id);
-        int moonCount = DetermineMoonCount(planet, random);
+        var moonCount = DetermineMoonCount(planet, random);
         _logger.LogInformation("Generating {MoonCount} moons for planet {PlanetName}", moonCount, planet.PlanetName);
-        for (int i = 0; i < moonCount; i++)
+        for (var i = 0; i < moonCount; i++)
         {
             var moon = GenerateMoon(planet, i, random);
             planet.Moons.Add(moon);
