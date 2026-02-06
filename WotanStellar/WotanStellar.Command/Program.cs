@@ -32,7 +32,7 @@ class Program
             })
             .ConfigureServices((context, services) =>
             {
-                services.AddSingleton<GeneratePlanetsService>();
+                services.AddScoped<GeneratePlanetsService>(); // data context
                 services.AddWotanStellarData(options =>
                 {
                     options.ConnectionString = context.Configuration.GetConnectionString("StellarData")!;

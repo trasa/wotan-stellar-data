@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using WotanStellar.Data.Entities;
 
 namespace WotanStellar.Data.Generators;
@@ -8,9 +9,18 @@ public interface IMoonGenerator
 }
 public class MoonGenerator : IMoonGenerator
 {
+    private readonly ILogger<MoonGenerator> _logger;
+
+    public MoonGenerator(ILogger<MoonGenerator> logger)
+    {
+        _logger = logger;
+    }
+
     public void GenerateMoons(Planet planet, Random random)
     {
+        _logger.LogInformation("Generating moons for planet {PlanetName} (ID: {PlanetId})", planet.PlanetName, planet.Id);
         int moonCount = DetermineMoonCount(planet, random);
+        _logger.LogInformation("Generating {MoonCount} moons for planet {PlanetName}", moonCount, planet.PlanetName);
         for (int i = 0; i < moonCount; i++)
         {
             var moon = GenerateMoon(planet, i, random);
@@ -46,6 +56,9 @@ public class MoonGenerator : IMoonGenerator
 
         // Calculate orbital period (simplified)
         double orbitalPeriodDays = Math.Sqrt(Math.Pow(orbitalRadiusKm / 384400, 3)) * 27.3; // Scaled to Earth's Moon
+
+        _logger.LogInformation("Generated moon {MoonName} for planet {PlanetName}: Mass={MoonMass} Earth masses, Radius={MoonRadius} Earth radii, OrbitalRadius={OrbitalRadiusKm} km, OrbitalPeriod={OrbitalPeriodDays} days",
+            $"{planet.PlanetName} {(char)('a' + index)}", planet.PlanetName, moonMass, moonRadius, orbitalRadiusKm, orbitalPeriodDays);
 
         return new Moon
         {

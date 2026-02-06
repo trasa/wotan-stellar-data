@@ -36,8 +36,10 @@ public class PlanetGenerator : IPlanetGenerator
 
     private List<Planet> GeneratePlanets(Star star, Random random)
     {
+        _logger.LogInformation("Generating planets for star {StarName} (ID: {StarId})", star.StarName, star.Id);
         var planets = new List<Planet>();
         int planetCount = DeterminePlanetCount(star, random);
+        _logger.LogInformation("Generating {PlanetCount} planets for star {StarName}", planetCount, star.StarName);
         for (int i = 0; i < planetCount; i++)
         {
             var planet = GeneratePlanet(star, i, random);
@@ -74,11 +76,11 @@ public class PlanetGenerator : IPlanetGenerator
     private Planet GeneratePlanet(Star star, int index, Random random)
     {
         // Orbital radius increases with each planet (roughly exponential)
-        double orbitalRadiusAu = 0.4 * Math.Pow(1.7, index) * (0.8 + random.NextDouble() * 0.4);
+        var orbitalRadiusAu = 0.4 * Math.Pow(1.7, index) * (0.8 + random.NextDouble() * 0.4);
 
         // Calculate temperature based on distance from star
-        double starLuminosity = star.StarLuminosity ?? 1.0;
-        double effectiveTemp = CalculateEffectiveTemperature(orbitalRadiusAu, starLuminosity);
+        var starLuminosity = star.StarLuminosity ?? 1.0;
+        var effectiveTemp = CalculateEffectiveTemperature(orbitalRadiusAu, starLuminosity);
 
         // Determine planet type based on distance and temperature
         string planetType = DeterminePlanetType(orbitalRadiusAu, effectiveTemp, random);
@@ -87,8 +89,18 @@ public class PlanetGenerator : IPlanetGenerator
         var (mass, radius) = GeneratePlanetPhysics(planetType, random);
 
         // Calculate orbital period using Kepler's third law
-        double starMass = star.StarMass ?? 1.0;
-        double orbitalPeriodDays = CalculateOrbitalPeriod(orbitalRadiusAu, starMass);
+        var starMass = star.StarMass ?? 1.0;
+        var orbitalPeriodDays = CalculateOrbitalPeriod(orbitalRadiusAu, starMass);
+
+        _logger.LogInformation("Generated planet {PlanetName} around star {StarName}: Type={PlanetType}, OrbitalRadius={OrbitalRadiusAu} AU, OrbitalPeriod={OrbitalPeriodDays} days, Mass={MassEarthMasses} Earth masses, Radius={RadiusEarthRadii} Earth radii, Temp={SurfaceTemperatureK} K",
+            string.Format(RomanNumeralFormatter.Instance, "{0} {1:R}", star.StarName, index + 1),
+            star.StarName,
+            planetType,
+            orbitalRadiusAu,
+            orbitalPeriodDays,
+            mass,
+            radius,
+            effectiveTemp);
         return new Planet
         {
             StarId = star.Id,
