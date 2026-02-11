@@ -41,7 +41,7 @@ public class LuminosityParser : ILuminosityParser
         }
         // otherwise try and parse roman numeral...
         // can have marginal types: "IV-V"
-        var lastPart = start.TakeWhile(c => RomanNumeralFormatter.IsRomanNumeral(c) || c == '-').Count();
+        var lastPart = start.TakeWhile(c => RomanNumeralFormatter.IsRomanChar(c) || c == '-').Count();
         if (lastPart == 0)
         {
             return (null, s);

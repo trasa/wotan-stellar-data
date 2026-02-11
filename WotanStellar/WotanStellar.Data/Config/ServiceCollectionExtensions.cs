@@ -1,7 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
+using WotanStellar.Data.Calculators;
+using WotanStellar.Data.Formatters;
 using WotanStellar.Data.Generators;
+using WotanStellar.Data.Parsers;
 using WotanStellar.Data.Pathfinders;
 
 namespace WotanStellar.Data.Config;
@@ -46,7 +49,15 @@ public static class ServiceCollectionExtensions
             .AddScoped<IStellarPathfinder, StellarPathfinder>() // scoped because they use the DbContext which is not threadsafe
             .AddScoped<IRoutePathfinder, AStarPathfinder>() // scoped for same reason
             .AddSingleton<IPlanetGenerator, PlanetGenerator>()
-            .AddSingleton<IMoonGenerator, MoonGenerator>();
+            .AddSingleton<IMoonGenerator, MoonGenerator>()
+            .AddSingleton<ILuminosityCalculator, LuminosityCalculator>()
+            .AddSingleton<RomanNumeralFormatter>()
+            .AddSingleton<IFormatProvider>(sp => sp.GetRequiredService<RomanNumeralFormatter>())
+            .AddSingleton<IDegenerateParser, DegenerateParser>()
+            .AddSingleton<ILuminosityParser, LuminosityParser>()
+            .AddSingleton<ISpectralTypeParser, SpectralTypeParser>()
+            .AddSingleton<ISpectralSubclassParser, SpectralSubclassParser>();
+
 
         return services;
 

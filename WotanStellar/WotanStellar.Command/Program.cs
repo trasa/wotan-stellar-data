@@ -14,9 +14,11 @@ class Program
     {
         var commandOptions = CommandOptions.Instance;
         var generatePlanetsCommand = new GeneratePlanetsCommand(commandOptions);
+        var generateLuminosityCommand = new GenerateLuminosityCommand(commandOptions);
 
         var rootCommand = commandOptions.BuildRootCommand();
         rootCommand.Subcommands.Add(generatePlanetsCommand);
+        rootCommand.Subcommands.Add(generateLuminosityCommand);
         return await rootCommand.Parse(args).InvokeAsync();
     }
 
@@ -32,7 +34,8 @@ class Program
             })
             .ConfigureServices((context, services) =>
             {
-                services.AddScoped<GeneratePlanetsService>(); // data context
+                services.AddScoped<GeneratePlanetsService>() // data context
+                        .AddScoped<GenerateLuminosityService>();
                 services.AddWotanStellarData(options =>
                 {
                     options.ConnectionString = context.Configuration.GetConnectionString("StellarData")!;

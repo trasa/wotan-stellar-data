@@ -23,7 +23,7 @@ public class RomanNumeralFormatter : IFormatProvider, ICustomFormatter
         (1, "I")
     };
 
-    public static bool IsRomanNumeral(char c) => c is 'I' or 'V' or 'X' or 'L' or 'C' or 'D' or 'M';
+    public static bool IsRomanChar(char c) => c is 'I' or 'V' or 'X' or 'L' or 'C' or 'D' or 'M';
 
     public object? GetFormat(Type? formatType)
     {
