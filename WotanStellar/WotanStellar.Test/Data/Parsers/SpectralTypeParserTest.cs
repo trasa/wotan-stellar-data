@@ -1,25 +1,6 @@
 using WotanStellar.Data.Entities;
-/*
-
-   DA3+DC10
-
-   DA5.5+dM+dM
-
-       DA7.3+dM
-
-   DA7+DA5
-       DA7+DA7
-
-   DAH+DC
-
-   DC9+DC
-       DC9+DC+M VI
-
-       DZ9+DB
- */
 using WotanStellar.Data.Parsers;
 using Xunit.Abstractions;
-
 
 namespace WotanStellar.Test.Data.Parsers;
 
