@@ -190,7 +190,7 @@ public class PlanetGenerator : IPlanetGenerator
             case < 0.5:
                 return random.NextDouble() < 0.7 ? "hot_terrestrial" : "lava_world";
             case < frostLine:
-                return random.NextDouble() < 0.8 ? "terrestrial" : "ocean_world";
+                return random.NextDouble() < 0.4 ? "terrestrial" : "ocean_world";
             case < frostLine * 2:
             {
                 var roll = random.NextDouble();
