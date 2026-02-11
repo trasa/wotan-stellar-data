@@ -1,6 +1,6 @@
 using WotanStellar.Command.Services;
 
-namespace WotanStellar.Command.Arguments;
+namespace WotanStellar.Command.Commands;
 
 public interface IActionArguments<TService> where TService : IRunnableService<TService>
 {

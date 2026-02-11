@@ -1,5 +1,4 @@
 using System.CommandLine;
-using WotanStellar.Command.Arguments;
 using WotanStellar.Command.Services;
 
 namespace WotanStellar.Command.Commands;
