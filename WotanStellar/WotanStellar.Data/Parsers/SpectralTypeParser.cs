@@ -64,7 +64,12 @@ public class SpectralTypeParser : ISpectralTypeParser
         spectralType = spectralType.Trim().ToUpper();
         if (spectralType.StartsWith('D'))
         {
-            return ParseWhiteDwarf(spectralType[1..]);
+            return ParseWhiteDwarf(spectralType);
+        }
+
+        if (spectralType.Contains('/'))
+        {
+            return ParseComplexType(spectralType);
         }
 
         // Parse main spectral class (O, B, A, F, G, K, M, L, T, Y)
@@ -83,6 +88,12 @@ public class SpectralTypeParser : ISpectralTypeParser
             SpectralSubClass = subClass,
             LuminosityClass = luminosityClass,
         };
+    }
+
+    private ISpectralType? ParseComplexType(string spectralType)
+    {
+        // TODO (type)/(otherType)
+        return null;
     }
 
     private double? EstimateLuminosity(string spectralType)
@@ -129,14 +140,11 @@ public class SpectralTypeParser : ISpectralTypeParser
         throw new NotImplementedException();
     }
 
-    private ISpectralType ParseWhiteDwarf(string spectralSubType)
+    private ISpectralType ParseWhiteDwarf(string spectralType)
     {
         // White dwarfs: DA, DB, DC, DO, DQ, DZ followed by temperature class
         // Temperature affects luminosity but they're all quite dim
-        return new DegenerateSpectralType
-        {
-            SubType = spectralSubType
-        };
+        return new DegenerateSpectralType();
 /*
         // Extract temperature class if present (0-9)
         var tempClass = 5.0;
