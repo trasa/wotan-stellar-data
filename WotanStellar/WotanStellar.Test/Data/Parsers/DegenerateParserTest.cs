@@ -10,7 +10,6 @@
  DAH+DC
 
  DC9+DC
-     DC9+DC+M VI
 
      DZ9+DB
 */
@@ -35,8 +34,17 @@ public class DegenerateParserTest
     [InlineData("DAH9.5", 9.5)]
     [InlineData("DAV4", 4.0)]
     [InlineData("DC10.2", 10.2)]
-
     public void Parse(string input, double? expectedClass)
+    {
+        var d = _parser.Parse(input);
+        Assert.Equal(d.TemperatureClass, expectedClass);
+    }
+
+    [Theory]
+    [InlineData("DA3+DC10", 3.0)]
+    [InlineData("DA5.5+dM+dM", 5.5)]
+    [InlineData(     "DC9+DC+M VI", 9.0)]
+    public void ParseCompound(string input, double? expectedClass)
     {
         var d = _parser.Parse(input);
         Assert.Equal(d.TemperatureClass, expectedClass);

@@ -13,14 +13,17 @@ public class SpectralTypeParser : ISpectralTypeParser
     private readonly ILogger<SpectralTypeParser> _logger;
     private readonly ISpectralSubclassParser _subclassParser;
     private readonly ILuminosityParser _luminosityParser;
+    private readonly IDegenerateParser _degenerateParser;
 
     public SpectralTypeParser(ILogger<SpectralTypeParser> logger,
         ISpectralSubclassParser subclassParser,
-        ILuminosityParser luminosityParser)
+        ILuminosityParser luminosityParser,
+        IDegenerateParser degenerateParser)
     {
         _logger = logger;
         _subclassParser = subclassParser;
         _luminosityParser = luminosityParser;
+        _degenerateParser = degenerateParser;
     }
 
     // Luminosity classes (Roman numerals in spectral type)
@@ -64,12 +67,12 @@ public class SpectralTypeParser : ISpectralTypeParser
         spectralType = spectralType.Trim().ToUpper();
         if (spectralType.StartsWith('D'))
         {
-            return ParseWhiteDwarf(spectralType);
+            return _degenerateParser.Parse(spectralType);
         }
 
         if (spectralType.Contains('/'))
         {
-            return ParseComplexType(spectralType);
+            return ParseCompound(spectralType.Split('/'));
         }
 
         // Parse main spectral class (O, B, A, F, G, K, M, L, T, Y)
@@ -90,10 +93,15 @@ public class SpectralTypeParser : ISpectralTypeParser
         };
     }
 
-    private ISpectralType? ParseComplexType(string spectralType)
+    private ISpectralType? ParseCompound(string[] parts)
     {
-        // TODO (type)/(otherType)
-        return null;
+        var components = parts.Select(Parse).OfType<ISpectralType>().ToList();
+
+        if (components.Count == 0)
+        {
+            return null;
+        }
+        return components.Count == 1 ? components[0] : new CompoundSpectralType { Components = components };
     }
 
     private double? EstimateLuminosity(string spectralType)

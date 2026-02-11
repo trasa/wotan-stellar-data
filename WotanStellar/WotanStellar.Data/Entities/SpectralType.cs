@@ -5,7 +5,6 @@ namespace WotanStellar.Data.Entities;
 /// </summary>
 public interface ISpectralType
 {
-    char SpectralClass { get; }
 }
 
 public class MainSequenceSpectralType : ISpectralType
@@ -20,4 +19,10 @@ public class DegenerateSpectralType : ISpectralType
     public char SpectralClass => 'D'; // Degenerates (white dwarfs)
     public double? TemperatureClass { get; set; }
     public double? SurfaceTemperatureKelvin => 50400.0 / TemperatureClass;
+}
+
+
+public class CompoundSpectralType : ISpectralType
+{
+    public List<ISpectralType> Components { get; set; } = [];
 }
