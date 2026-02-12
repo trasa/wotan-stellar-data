@@ -6,7 +6,15 @@ namespace WotanStellar.Data.Generators;
 
 public interface IPlanetGenerator
 {
-    void GeneratePlanets(StarSystem system);
+    /// <summary>
+    /// Generate planets and moons for the stars in this system
+    /// </summary>
+    /// <param name="system"></param>
+    /// <param name="forceCreate">
+    /// if false, and a star already has planets and/or moons, skip generation for this star.
+    /// otherwise, delete the existing structures and create new ones.
+    /// </param>
+    void GeneratePlanets(StarSystem system, bool forceCreate = false);
 }
 
 public class PlanetGenerator : IPlanetGenerator
@@ -20,15 +28,29 @@ public class PlanetGenerator : IPlanetGenerator
         _moonGenerator = moonGenerator;
     }
 
-    public void GeneratePlanets(StarSystem system)
+    public void GeneratePlanets(StarSystem system, bool forceCreate = false)
     {
+        if (system.SystemName == "Sol")
+        {
+            // we can skip Sol, don't use random generation for that ... we live here
+            _logger.LogWarning("Skipping Sol System -- it already has known planets ...");
+            return;
+        }
+
         // Use star system ID as base seed for deterministic generation
         var random = new Random(system.Id);
 
         _logger.LogWarning("Generating planets for system {SystemId}, has {Count} stars", system.Id, system.Stars.Count);
         foreach (var star in system.Stars)
         {
-            GeneratePlanets(star, random);
+            if (star.Planets.Count == 0 || forceCreate)
+            {
+                GeneratePlanets(star, random);
+            }
+            else
+            {
+                _logger.LogWarning("Star {StarName} (ID: {StarId}) already has planets and forceCreate == false, skipping generation", star.StarName, star.Id);
+            }
         }
     }
 
