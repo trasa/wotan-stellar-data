@@ -18,9 +18,9 @@ public class MoonGenerator : IMoonGenerator
 
     public void GenerateMoons(Planet planet, Random random)
     {
-        _logger.LogInformation("Generating moons for planet {PlanetName} (ID: {PlanetId})", planet.PlanetName, planet.Id);
+        _logger.LogInformation("Generating moons for planet {PlanetName} (ID: {PlanetId})", planet.Name, planet.Id);
         var moonCount = DetermineMoonCount(planet, random);
-        _logger.LogInformation("Generating {MoonCount} moons for planet {PlanetName}", moonCount, planet.PlanetName);
+        _logger.LogInformation("Generating {MoonCount} moons for planet {PlanetName}", moonCount, planet.Name);
         for (var i = 0; i < moonCount; i++)
         {
             var moon = GenerateMoon(planet, i, random);
@@ -31,10 +31,10 @@ public class MoonGenerator : IMoonGenerator
     private int DetermineMoonCount(Planet planet, Random random)
     {
         // Gas giants get more moons
-        if (planet.PlanetType.Contains("gas_giant"))
+        if (planet.PlanetType == PlanetType.GasGiant)
             return random.Next(5, 20);
 
-        if (planet.PlanetType.Contains("ice_giant"))
+        if (planet.PlanetType == PlanetType.IceGiant)
             return random.Next(3, 15);
 
         // Terrestrial planets get fewer moons
@@ -58,12 +58,12 @@ public class MoonGenerator : IMoonGenerator
         double orbitalPeriodDays = Math.Sqrt(Math.Pow(orbitalRadiusKm / 384400, 3)) * 27.3; // Scaled to Earth's Moon
 
         _logger.LogInformation("Generated moon {MoonName} for planet {PlanetName}: Mass={MoonMass} Earth masses, Radius={MoonRadius} Earth radii, OrbitalRadius={OrbitalRadiusKm} km, OrbitalPeriod={OrbitalPeriodDays} days",
-            $"{planet.PlanetName} {(char)('a' + index)}", planet.PlanetName, moonMass, moonRadius, orbitalRadiusKm, orbitalPeriodDays);
+            $"{planet.Name} {(char)('a' + index)}", planet.Name, moonMass, moonRadius, orbitalRadiusKm, orbitalPeriodDays);
 
         return new Moon
         {
             PlanetId = planet.Id,
-            MoonName = $"{planet.PlanetName} {(char)('a' + index)}",
+            MoonName = $"{planet.Name} {(char)('a' + index)}",
             MoonType = DetermineMoonType(moonMass, planet.SurfaceTemperatureK ?? 200, random),
             OrbitalRadiusKm = orbitalRadiusKm,
             OrbitalPeriodDays = orbitalPeriodDays,

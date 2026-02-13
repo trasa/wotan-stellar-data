@@ -71,8 +71,10 @@ public class StellarContext : DbContext
             entity.ToTable("planets");
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.StarId).HasColumnName("star_id");
-            entity.Property(e => e.PlanetName).HasColumnName("planet_name");
-            entity.Property(e => e.PlanetType).HasColumnName("planet_type");
+            entity.Property(e => e.Name).HasColumnName("planet_name");
+            entity.Property(e => e.PlanetType)
+                .HasColumnName("planet_type")
+                .HasConversion<string>();
             entity.Property(e => e.OrbitalRadiusAu).HasColumnName("orbital_radius_au");
             entity.Property(e => e.OrbitalPeriodDays).HasColumnName("orbital_period_days");
             entity.Property(e => e.MassEarthMasses).HasColumnName("mass_earth_masses");
@@ -105,6 +107,46 @@ public class StellarContext : DbContext
                 .WithMany(p => p.Moons)
                 .HasForeignKey(m => m.PlanetId);
         });
+
+        modelBuilder.Entity<PlanetaryRingSystem>(entity =>
+        {
+            entity.ToTable("planetary_ring_systems");
+            entity.Property(e => e.PlanetId).HasColumnName("planet_id");
+            entity.Property(e => e.InnerEdgeRadius).HasColumnName("inner_edge_radius");
+            entity.Property(e => e.OuterEdgeRadius).HasColumnName("outer_edge_radius");
+            entity.Property(e => e.PrimaryComposition)
+                .HasColumnName("primary_composition")
+                .HasConversion<string>();
+            entity.Property(e => e.TotalMassKg).HasColumnName("total_mass");
+            entity.Property(e => e.Seed).HasColumnName("seed");
+
+            entity.HasOne(r => r.Planet)
+                .WithOne(p => p.RingSystem)
+                .HasForeignKey<PlanetaryRingSystem>(r => r.PlanetId);
+        });
+
+        modelBuilder.Entity<PlanetaryRing>(entity =>
+        {
+            entity.ToTable("planetary_rings");
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.RingIndex).HasColumnName("ring_index");
+            entity.Property(e => e.InnerRadius).HasColumnName("inner_radius");
+            entity.Property(e => e.OuterRadius).HasColumnName("outer_radius");
+            entity.Property(e => e.Density).HasColumnName("density");
+            entity.Property(e => e.Brightness).HasColumnName("brightness");
+            entity.Property(e => e.RingType)
+                .HasColumnName("ring_type")
+                .HasConversion<string>();
+            entity.Property(e => e.RedTint).HasColumnName("tint_color_r");
+            entity.Property(e => e.GreenTint).HasColumnName("tint_color_g");
+            entity.Property(e => e.BlueTint).HasColumnName("tint_color_b");
+            entity.Property(e => e.Seed).HasColumnName("seed");
+
+            entity.HasOne(r => r.RingSystem)
+                .WithMany(rs => rs.Rings)
+                .HasForeignKey(r => r.PlanetId);
+        });
+
         base.OnModelCreating(modelBuilder);
     }
 }

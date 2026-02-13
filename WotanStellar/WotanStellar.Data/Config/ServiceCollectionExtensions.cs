@@ -49,6 +49,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IStellarPathfinder, StellarPathfinder>() // scoped because they use the DbContext which is not threadsafe
             .AddScoped<IRoutePathfinder, AStarPathfinder>() // scoped for same reason
             .AddSingleton<IPlanetGenerator, PlanetGenerator>()
+            .AddSingleton<IPlanetaryRingGenerator, PlanetaryRingGenerator>()
             .AddSingleton<IMoonGenerator, MoonGenerator>()
             .AddSingleton<ILuminosityCalculator, LuminosityCalculator>()
             .AddSingleton<RomanNumeralFormatter>()

@@ -14,4 +14,8 @@ public class Moon
     public int Seed { get; set; }
 
     public Planet Planet { get; set; } = null!;
+
+    public double RadiusMeters => RadiusEarthRadii * Planet.EarthRadiusKm * 1000;
+    public double MassKg => MassEarthMasses * Planet.EarthMassKg;
+
 }
