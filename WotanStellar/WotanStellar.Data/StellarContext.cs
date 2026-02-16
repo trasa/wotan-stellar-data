@@ -23,14 +23,14 @@ public class StellarContext : DbContext
             entity.ToTable("star_systems");
 
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.SystemName).HasColumnName("system_name");
+            entity.Property(e => e.Name).HasColumnName("system_name");
             entity.Property(e => e.SystemType).HasColumnName("system_type");
             entity.Property(e => e.SourceSystemId).HasColumnName("source_system_id");
             entity.Property(e => e.GalacticX).HasColumnName("galactic_x");
             entity.Property(e => e.GalacticY).HasColumnName("galactic_y");
             entity.Property(e => e.GalacticZ).HasColumnName("galactic_z");
             entity.Property(e => e.Position).HasColumnName("position").HasColumnType("geometry(PointZ)");
-            entity.Property(e => e.StarMass).HasColumnName("star_mass");
+            entity.Property(e => e.Mass).HasColumnName("star_mass");
             entity.Property(e => e.StarSpectralTypeSize).HasColumnName("star_spectral_type_size");
             entity.Property(e => e.DistanceSolLy).HasColumnName("distance_sol_ly");
             entity.Property(e => e.StarRadius).HasColumnName("star_radius");
@@ -47,18 +47,18 @@ public class StellarContext : DbContext
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.StarSystemId).HasColumnName("star_system_id");
-            entity.Property(e => e.StarName).HasColumnName("star_name");
+            entity.Property(e => e.Name).HasColumnName("star_name");
             entity.Property(e => e.StarType).HasColumnName("star_type");
             entity.Property(e => e.SourceSystemId).HasColumnName("source_system_id");
             entity.Property(e => e.GalacticX).HasColumnName("galactic_x");
             entity.Property(e => e.GalacticY).HasColumnName("galactic_y");
             entity.Property(e => e.GalacticZ).HasColumnName("galactic_z");
             entity.Property(e => e.Position).HasColumnName("position").HasColumnType("geometry(PointZ)");
-            entity.Property(e => e.StarMass).HasColumnName("star_mass");
+            entity.Property(e => e.Mass).HasColumnName("star_mass");
             entity.Property(e => e.StarSpectralTypeSize).HasColumnName("star_spectral_type_size");
             entity.Property(e => e.DistanceSolLy).HasColumnName("distance_sol_ly");
-            entity.Property(e => e.StarRadius).HasColumnName("star_radius");
-            entity.Property(e => e.StarLuminosity).HasColumnName("star_luminosity");
+            entity.Property(e => e.Radius).HasColumnName("star_radius");
+            entity.Property(e => e.Luminosity).HasColumnName("star_luminosity");
 
             entity.HasOne<StarSystem>(s => s.StarSystem)
                 .WithMany(ss => ss.Stars)

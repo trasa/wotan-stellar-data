@@ -29,11 +29,11 @@ public class GenerateAllPlanetsService : IRunnableService<GenerateAllPlanetsServ
         {
             if (system.Stars.Count == 0)
             {
-                _logger.LogWarning("Star System {Id} {Name} has no stars!", system.Id, system.SystemName);
+                _logger.LogWarning("Star System {Id} {Name} has no stars!", system.Id, system.Name);
             }
             else
             {
-                _logger.LogInformation("Generating planets for system {Id}, {Name}", system.Id, system.SystemName);
+                _logger.LogInformation("Generating planets for system {Id}, {Name}", system.Id, system.Name);
                 _planetGenerator.GeneratePlanets(system);
             }
         }

@@ -39,7 +39,7 @@ public class GeneratePlanetsService : IRunnableService<GeneratePlanetsService>
             _logger.LogWarning("Star System {SystemId} has no stars, skipping planet generation!", id);
             return;
         }
-        _logger.LogInformation("Generating planets for system {Id}, {Name}", id, starSystem.SystemName);
+        _logger.LogInformation("Generating planets for system {Id}, {Name}", id, starSystem.Name);
         _planetGenerator.GeneratePlanets(starSystem);
 
         try
@@ -48,7 +48,7 @@ public class GeneratePlanetsService : IRunnableService<GeneratePlanetsService>
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "Failed to save generated planets for system {Id}, {Name}", id, starSystem.SystemName);
+            _logger.LogError(e, "Failed to save generated planets for system {Id}, {Name}", id, starSystem.Name);
         }
     }
 }

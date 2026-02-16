@@ -30,7 +30,7 @@ public class PlanetGenerator : IPlanetGenerator
 
     public void GeneratePlanets(StarSystem system, bool forceCreate = false)
     {
-        if (system.SystemName == "Sol")
+        if (system.Name == "Sol")
         {
             // we can skip Sol, don't use random generation for that ... we live here
             _logger.LogWarning("Skipping Sol System -- it already has known planets ...");
@@ -49,16 +49,16 @@ public class PlanetGenerator : IPlanetGenerator
             }
             else
             {
-                _logger.LogWarning("Star {StarName} (ID: {StarId}) already has planets and forceCreate == false, skipping generation", star.StarName, star.Id);
+                _logger.LogWarning("Star {StarName} (ID: {StarId}) already has planets and forceCreate == false, skipping generation", star.Name, star.Id);
             }
         }
     }
 
     private void GeneratePlanets(Star star, Random random)
     {
-        _logger.LogWarning("Generating planets for star {StarName} (ID: {StarId})", star.StarName, star.Id);
+        _logger.LogWarning("Generating planets for star {StarName} (ID: {StarId})", star.Name, star.Id);
         var planetCount = DeterminePlanetCount(star, random);
-        _logger.LogInformation("Generating {PlanetCount} planets for star {StarName}", planetCount, star.StarName);
+        _logger.LogInformation("Generating {PlanetCount} planets for star {StarName}", planetCount, star.Name);
         for (var i = 0; i < planetCount; i++)
         {
             var planet = GeneratePlanet(star, i, random);
@@ -74,10 +74,10 @@ public class PlanetGenerator : IPlanetGenerator
         // M-type stars (red dwarfs): 2-6 planets
         // K-type stars: 3-7 planets
 
-        if (star.StarMass == null)
+        if (star.Mass == null)
             return random.Next(2, 6);
 
-        var mass = star.StarMass.Value;
+        var mass = star.Mass.Value;
 
         return mass switch
         {
@@ -95,7 +95,7 @@ public class PlanetGenerator : IPlanetGenerator
         var orbitalRadiusAu = 0.4 * Math.Pow(1.7, index) * (0.8 + random.NextDouble() * 0.4);
 
         // Calculate temperature based on distance from star
-        var starLuminosity = star.StarLuminosity ?? 1.0;
+        var starLuminosity = star.Luminosity ?? 1.0;
         var effectiveTemp = CalculateEffectiveTemperature(orbitalRadiusAu, starLuminosity);
 
         // Determine planet type based on distance and temperature
@@ -105,12 +105,12 @@ public class PlanetGenerator : IPlanetGenerator
         var (mass, radius) = GeneratePlanetPhysics(planetType, random);
 
         // Calculate orbital period using Kepler's third law
-        var starMass = star.StarMass ?? 1.0;
+        var starMass = star.Mass ?? 1.0;
         var orbitalPeriodDays = CalculateOrbitalPeriod(orbitalRadiusAu, starMass);
 
         _logger.LogInformation("Generated planet {PlanetName} around star {StarName}: Type={PlanetType}, OrbitalRadius={OrbitalRadiusAu} AU, OrbitalPeriod={OrbitalPeriodDays} days, Mass={MassEarthMasses} Earth masses, Radius={RadiusEarthRadii} Earth radii, Temp={SurfaceTemperatureK} K",
-            string.Format(RomanNumeralFormatter.Instance, "{0} {1:R}", star.StarName, index + 1),
-            star.StarName,
+            string.Format(RomanNumeralFormatter.Instance, "{0} {1:R}", star.Name, index + 1),
+            star.Name,
             planetType,
             orbitalRadiusAu,
             orbitalPeriodDays,
@@ -120,7 +120,7 @@ public class PlanetGenerator : IPlanetGenerator
         return new Planet
         {
             StarId = star.Id,
-            Name = string.Format(RomanNumeralFormatter.Instance, "{0} {1:R}", star.StarName, index + 1),
+            Name = string.Format(RomanNumeralFormatter.Instance, "{0} {1:R}", star.Name, index + 1),
             PlanetType = planetType,
             OrbitalRadiusAu = orbitalRadiusAu,
             OrbitalPeriodDays = orbitalPeriodDays,

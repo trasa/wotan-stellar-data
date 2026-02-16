@@ -25,16 +25,16 @@ public class GenerateLuminosityService : IRunnableService<GenerateLuminosityServ
     {
         foreach (var star in _stellarContext.Stars)
         {
-            if (star.StarName == "Sol")
+            if (star.Name == "Sol")
             {
                 _logger.LogInformation("Skipping Sol, it already has a known luminosity value");
-                star.StarLuminosity = 1.0; // set Sol's luminosity to 1 L☉
+                star.Luminosity = 1.0; // set Sol's luminosity to 1 L☉
                 continue;
             }
-            _logger.LogInformation("Processing star {Id}, {Name} {StellarType}", star.Id, star.StarName, star.StarSpectralTypeSize);
+            _logger.LogInformation("Processing star {Id}, {Name} {StellarType}", star.Id, star.Name, star.StarSpectralTypeSize);
             if (star.StarSpectralTypeSize == null)
             {
-                _logger.LogWarning("Star {Id}, {Name} has no spectral type, skipping luminosity calculation", star.Id, star.StarName);
+                _logger.LogWarning("Star {Id}, {Name} has no spectral type, skipping luminosity calculation", star.Id, star.Name);
             }
             else
             {
@@ -42,14 +42,14 @@ public class GenerateLuminosityService : IRunnableService<GenerateLuminosityServ
                 var luminosity = _luminosityCalculator.CalculateLuminosity(stellarType);
                 if (luminosity != null)
                 {
-                    star.StarLuminosity = luminosity.Value;
+                    star.Luminosity = luminosity.Value;
                     _logger.LogInformation("Calculated luminosity for star {Id}, {Name}: {Luminosity} L☉",
-                        star.Id, star.StarName, luminosity.Value);
+                        star.Id, star.Name, luminosity.Value);
                 }
                 else
                 {
                     _logger.LogWarning("Failed to calculate luminosity for star {Id}, {Name} with spectral type {SpectralType}",
-                        star.Id, star.StarName, star.StarSpectralTypeSize);
+                        star.Id, star.Name, star.StarSpectralTypeSize);
                 }
             }
         }
