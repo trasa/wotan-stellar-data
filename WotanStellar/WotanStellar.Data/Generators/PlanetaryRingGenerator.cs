@@ -21,7 +21,8 @@ public class PlanetaryRingGenerator : IPlanetaryRingGenerator
 
     public PlanetaryRingSystem? Generate(Planet planet)
     {
-        var random = new Random(HashCode.Combine(planet.Seed, "rings"));
+        var ringSystemSeed = HashCode.Combine(planet.Seed, "rings");
+        var random = new Random(ringSystemSeed);
         if (!planet.ShouldHaveRings(random))
         {
             // nope
@@ -31,7 +32,8 @@ public class PlanetaryRingGenerator : IPlanetaryRingGenerator
 
         var ringSystem = new PlanetaryRingSystem(planet)
         {
-            PrimaryComposition = PlanetaryRingSystem.DetermineComposition(random, planet)
+            PrimaryComposition = PlanetaryRingSystem.DetermineComposition(random, planet),
+            Seed = ringSystemSeed,
         };
 
         var rocheLimitRadii = planet.RocheLimitRadii;
@@ -43,8 +45,10 @@ public class PlanetaryRingGenerator : IPlanetaryRingGenerator
 
         _logger.LogDebug("Generating ring system for planet {PlanetName}: Roche Limit = {RocheLimit:F2} radii, Inner Edge = {InnerEdge:F2} radii, Outer Edge = {OuterEdge:F2} radii, Composition = {Composition}",
             planet.Name, rocheLimitRadii, ringSystem.InnerEdgeRadius, ringSystem.OuterEdgeRadius, ringSystem.PrimaryComposition);
+
         // let's build some rings for this system
-        GenerateRings(random, planet, ringSystem);
+        var numRings = random.Next(1, 12);
+        GenerateRings(numRings, planet, ringSystem);
 
         ringSystem.TotalMassKg = CalculateRingMass(random, ringSystem);
         _logger.LogInformation("Generated ring system for planet {PlanetName} with {RingCount} rings and total mass {TotalMass:E2} kg.",
@@ -52,14 +56,15 @@ public class PlanetaryRingGenerator : IPlanetaryRingGenerator
         return ringSystem;
     }
 
-    private void GenerateRings(Random random, Planet planet, PlanetaryRingSystem ringSystem)
+    private void GenerateRings(int numRings, Planet planet, PlanetaryRingSystem ringSystem)
     {
-        var numRings = random.Next(1, 12);
         var currentRadius = ringSystem.InnerEdgeRadius;
         var radiusStep = (ringSystem.OuterEdgeRadius - ringSystem.InnerEdgeRadius) / numRings;
         var resonances = planet.CalculateMoonResonances();
         for (var i = 0; i < numRings; i++)
         {
+            var ringSeed = HashCode.Combine(ringSystem.Seed, i);
+            var random = new Random(ringSeed);
             var ringCenter = currentRadius * radiusStep / 0.5;
             // Check if this location is near a moon resonance
             var nearResonance = resonances.Any(r => Math.Abs(r - ringCenter) < 0.3);
@@ -75,6 +80,7 @@ public class PlanetaryRingGenerator : IPlanetaryRingGenerator
             var ring = new PlanetaryRing
             {
                 RingIndex = ringSystem.Rings.Count,
+                Seed = ringSeed,
                 InnerRadius = currentRadius,
                 OuterRadius = currentRadius + radiusStep * random.NextDouble(0.8, 1.2),
                 RingType = ringType,

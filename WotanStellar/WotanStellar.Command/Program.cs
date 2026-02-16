@@ -16,11 +16,13 @@ class Program
         var generatePlanetsCommand = new GeneratePlanetsCommand(commandOptions);
         var generateAllPlanetsCommand = new GenerateAllPlanetsCommand(commandOptions);
         var generateLuminosityCommand = new GenerateLuminosityCommand(commandOptions);
+        var generateRingsCommand = new GeneratePlanetRingsCommand(commandOptions);
 
         var rootCommand = commandOptions.BuildRootCommand();
         rootCommand.Subcommands.Add(generatePlanetsCommand);
         rootCommand.Subcommands.Add(generateAllPlanetsCommand);
         rootCommand.Subcommands.Add(generateLuminosityCommand);
+        rootCommand.Subcommands.Add(generateRingsCommand);
         return await rootCommand.Parse(args).InvokeAsync();
     }
 
@@ -38,7 +40,9 @@ class Program
             {
                 services.AddScoped<GeneratePlanetsService>() // data context
                     .AddScoped<GenerateAllPlanetsService>()
-                    .AddScoped<GenerateLuminosityService>();
+                    .AddScoped<GenerateLuminosityService>()
+                    .AddScoped<GeneratePlanetRingsService>();
+
                 services.AddWotanStellarData(options =>
                 {
                     options.ConnectionString = context.Configuration.GetConnectionString("StellarData")!;

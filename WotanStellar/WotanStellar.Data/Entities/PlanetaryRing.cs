@@ -5,7 +5,7 @@ namespace WotanStellar.Data.Entities;
 public class PlanetaryRing
 {
    public int Id { get; set; }
-   public int PlanetId { get; set; }
+   public int PlanetaryRingSystemId { get; set; } // same as planet.Id
    public int RingIndex { get; set; }
    public double InnerRadius { get; set; } // in planetary radii
    public double OuterRadius { get; set; } // in planetary radii
@@ -29,7 +29,6 @@ public class PlanetaryRing
    public int BlueTint { get; set; }
 
    public PlanetaryRingSystem RingSystem { get; set; } = null!;
-   public Planet Planet { get; set; } = null!;
 }
 
 

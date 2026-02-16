@@ -6,12 +6,11 @@ public class PlanetaryRingSystem
 
     public PlanetaryRingSystem(Planet planet)
     {
-        PlanetId = planet.Id;
+        Id = planet.Id;
         Planet = planet;
     }
 
-
-    public int PlanetId { get; set; }
+    public int Id { get; set; } // same as Planet.Id
     public double InnerEdgeRadius { get; set; } // in planetary radii
     public double OuterEdgeRadius { get; set; } // in planetary radii
     public RingComposition PrimaryComposition { get; set; }

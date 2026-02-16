@@ -87,6 +87,10 @@ public class StellarContext : DbContext
             entity.HasOne(p => p.Star)
                 .WithMany(s => s.Planets)
                 .HasForeignKey(p => p.StarId);
+
+            entity.HasOne(p => p.RingSystem)
+                .WithOne(rs => rs.Planet)
+                .HasForeignKey<PlanetaryRingSystem>(rs => rs.Id);
         });
 
         modelBuilder.Entity<Moon>(entity =>
@@ -111,24 +115,21 @@ public class StellarContext : DbContext
         modelBuilder.Entity<PlanetaryRingSystem>(entity =>
         {
             entity.ToTable("planetary_ring_systems");
-            entity.Property(e => e.PlanetId).HasColumnName("planet_id");
-            entity.Property(e => e.InnerEdgeRadius).HasColumnName("inner_edge_radius");
-            entity.Property(e => e.OuterEdgeRadius).HasColumnName("outer_edge_radius");
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.InnerEdgeRadius).HasColumnName("inner_edge");
+            entity.Property(e => e.OuterEdgeRadius).HasColumnName("outer_edge");
             entity.Property(e => e.PrimaryComposition)
                 .HasColumnName("primary_composition")
                 .HasConversion<string>();
             entity.Property(e => e.TotalMassKg).HasColumnName("total_mass");
             entity.Property(e => e.Seed).HasColumnName("seed");
-
-            entity.HasOne(r => r.Planet)
-                .WithOne(p => p.RingSystem)
-                .HasForeignKey<PlanetaryRingSystem>(r => r.PlanetId);
         });
 
         modelBuilder.Entity<PlanetaryRing>(entity =>
         {
             entity.ToTable("planetary_rings");
             entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.PlanetaryRingSystemId).HasColumnName("planetary_ring_system_id");
             entity.Property(e => e.RingIndex).HasColumnName("ring_index");
             entity.Property(e => e.InnerRadius).HasColumnName("inner_radius");
             entity.Property(e => e.OuterRadius).HasColumnName("outer_radius");
@@ -137,6 +138,7 @@ public class StellarContext : DbContext
             entity.Property(e => e.RingType)
                 .HasColumnName("ring_type")
                 .HasConversion<string>();
+            entity.Ignore(e => e.RingColor);
             entity.Property(e => e.RedTint).HasColumnName("tint_color_r");
             entity.Property(e => e.GreenTint).HasColumnName("tint_color_g");
             entity.Property(e => e.BlueTint).HasColumnName("tint_color_b");
@@ -144,7 +146,7 @@ public class StellarContext : DbContext
 
             entity.HasOne(r => r.RingSystem)
                 .WithMany(rs => rs.Rings)
-                .HasForeignKey(r => r.PlanetId);
+                .HasForeignKey(r => r.PlanetaryRingSystemId);
         });
 
         base.OnModelCreating(modelBuilder);
