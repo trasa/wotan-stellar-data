@@ -1,9 +1,7 @@
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using WotanStellar.Command.Commands;
 using WotanStellar.Data;
 using WotanStellar.Data.Calculators;
-using WotanStellar.Data.Generators;
 using WotanStellar.Data.Parsers;
 
 namespace WotanStellar.Command.Services;
@@ -27,6 +25,12 @@ public class GenerateLuminosityService : IRunnableService<GenerateLuminosityServ
     {
         foreach (var star in _stellarContext.Stars)
         {
+            if (star.StarName == "Sol")
+            {
+                _logger.LogInformation("Skipping Sol, it already has a known luminosity value");
+                star.StarLuminosity = 1.0; // set Sol's luminosity to 1 L☉
+                continue;
+            }
             _logger.LogInformation("Processing star {Id}, {Name} {StellarType}", star.Id, star.StarName, star.StarSpectralTypeSize);
             if (star.StarSpectralTypeSize == null)
             {
