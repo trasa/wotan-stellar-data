@@ -9,9 +9,9 @@ public interface IRoutePathfinder
 
 public class AStarPathfinder : IRoutePathfinder
 {
-    private readonly StellarPathfinder _stellarPathfinder;
+    private readonly IStellarPathfinder _stellarPathfinder;
 
-    public AStarPathfinder(StellarPathfinder stellarPathfinder)
+    public AStarPathfinder(IStellarPathfinder stellarPathfinder)
     {
         _stellarPathfinder = stellarPathfinder;
     }
