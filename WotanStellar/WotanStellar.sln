@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WotanStellar.Command", "Wot
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WotanStellar.Test", "WotanStellar.Test\WotanStellar.Test.csproj", "{39352B9B-51FB-4B4E-ABB1-787DB8AB23C2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WotanStellar.Actors", "WotanStellar.Actors\WotanStellar.Actors.csproj", "{CB72E968-E0AF-45A3-A5CB-30D6733C6D6F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{39352B9B-51FB-4B4E-ABB1-787DB8AB23C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39352B9B-51FB-4B4E-ABB1-787DB8AB23C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{39352B9B-51FB-4B4E-ABB1-787DB8AB23C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB72E968-E0AF-45A3-A5CB-30D6733C6D6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB72E968-E0AF-45A3-A5CB-30D6733C6D6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB72E968-E0AF-45A3-A5CB-30D6733C6D6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB72E968-E0AF-45A3-A5CB-30D6733C6D6F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
